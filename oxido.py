@@ -3,7 +3,7 @@ import requests
 
 # Ustaw swój klucz API OpenAI
 
-openai.api_key = "KLUCZ_API"
+openai.api_key = ""
 
 
 def fetch_article_from_url(url):
@@ -40,7 +40,7 @@ def save_html_to_file(html_content, file_path):
 
 def main():
     # URL do artykułu tekstowego
-    article_url = "https://cdn.oxido.pl/hr/Zadanie%20dla%20JJunior%20AI%20Developera%20-%20tresc%20artykulu.txt"  # Zastąp rzeczywistym URL-em do pliku tekstowego
+    article_url = "https://cdn.oxido.pl/hr/Zadanie%20dla%20JJunior%20AI%20Developera%20-%20tresc%20artykulu.txt"
 
     # Prompt, który zostanie wysłany do OpenAI wraz z treścią artykułu
     prompt = """
@@ -67,5 +67,20 @@ def main():
     else:
         print("Nie udało się pobrać artykułu z podanego URL.")
 
+    prompt = """
+    Na podstawie poprzedniego wygenerowanego pliku html wygeneruj inny szablon strony w HTML, który doda tylko style do odpowiednich tagów. Sekcja <body> powinna być pusta.
+    """
+    html_content = generate_html_from_article(article_text, prompt)
+    if html_content:
+        output_file = "szablon.html"
+        save_html_to_file(html_content, output_file)
+        print(f"Wygenerowany kod HTML zapisano w pliku {output_file}")
+    else:
+        print("Wystąpił problem podczas generowania kodu HTML.")
+
+
+    
+
+    
 if __name__ == "__main__":
     main()
