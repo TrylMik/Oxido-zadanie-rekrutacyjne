@@ -79,7 +79,39 @@ def main():
         print("Wystąpił problem podczas generowania kodu HTML.")
 
 
+    with open("artykul.html", "r", encoding="utf-8") as file:
+        file1_content = file.read()
+
+    # Załaduj drugi plik HTML (szablon ze stylami, pusty <body>)
+    with open("szablon.html", "r", encoding="utf-8") as file:
+        file2_content = file.read()
+
+    prompt = f"""
+    Jesteś pomocnym asystentem znającym HTML. 
+    Mam dwa pliki HTML:
+    1. Pierwszy plik zawiera kompletną sekcję <body>:
+    {file1_content}
+
+    2. Drugi plik to szablon ze stylami i pustą sekcją <body>:
+    {file2_content}
+
+    Połącz te pliki, wstawiając zawartość <body> z pierwszego pliku do sekcji <body> drugiego pliku. Zachowaj strukturę i style drugiego pliku.
+    Zwróć kompletny scalony kod HTML.
+    """
     
+    response = openai.ChatCompletion.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": prompt}
+        ]
+    )
+
+    # Pobierz wynik z odpowiedzi
+    merged_html = response['choices'][0]['message']['content']
+
+    with open("podglad.html", "w", encoding="utf-8") as merged_file:
+        merged_file.write(merged_html)
 
     
 if __name__ == "__main__":
